@@ -11,6 +11,7 @@ import {
 } from 'react-native'
 
 import { QuantitySelector } from '@/components/commerce/cart-row'
+import { CartIcon } from '@/components/ui/cart-icon'
 import {
   AppHeader,
   EmptyState,
@@ -29,7 +30,9 @@ export default function ProductDetailScreen() {
   const { id = '' } = useLocalSearchParams<{ id: string }>()
   const productQuery = useProduct(id)
   const addItem = useCartStore(state => state.addItem)
-  const cartCount = useCartStore(state => state.items.length)
+  const cartCount = useCartStore(state =>
+    state.items.reduce((sum, item) => sum + item.quantity, 0)
+  )
   const [selections, setSelections] = useState<
     Record<string, ProductVariantOption>
   >({})
@@ -122,10 +125,11 @@ export default function ProductDetailScreen() {
       <AppHeader
         title="Detail produk"
         right={
-          <Pressable onPress={() => router.push('/cart')}>
-            <Text style={styles.cart}>
-              🛒{cartCount ? ` ${cartCount}` : ''}
-            </Text>
+          <Pressable onPress={() => router.push('/cart')} style={styles.cart}>
+            <CartIcon size={22} variant="cart" />
+            {cartCount ? (
+              <Text style={styles.cartCount}>{cartCount}</Text>
+            ) : null}
           </Pressable>
         }
       />
@@ -256,7 +260,8 @@ export default function ProductDetailScreen() {
 
 const styles = StyleSheet.create({
   content: { padding: 0, gap: spacing.md, paddingBottom: spacing.xxl },
-  cart: { color: palette.ink, fontSize: 14 },
+  cart: { flexDirection: 'row', alignItems: 'center', gap: 3 },
+  cartCount: { color: palette.ink, fontSize: 12, fontWeight: '800' },
   hero: { width: '100%', aspectRatio: 1, backgroundColor: '#EEF2F1' },
   thumbnails: { paddingHorizontal: spacing.lg, gap: spacing.sm },
   thumbnailWrap: {

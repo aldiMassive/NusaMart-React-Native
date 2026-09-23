@@ -118,6 +118,3 @@ export const useCartStore = create<CartState>()(
     { name: '@nusamart/cart', storage: createJSONStorage(() => AsyncStorage) }
   )
 )
-
-export const selectSelectedCartItems = (state: CartState) =>
-  state.items.filter(item => item.selected)

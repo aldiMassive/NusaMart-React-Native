@@ -1,9 +1,11 @@
 import { Image } from 'expo-image'
 import { router } from 'expo-router'
+import { useMemo } from 'react'
 import { Alert, Pressable, StyleSheet, Text, View } from 'react-native'
 
 import { OrderSummaryCard } from '@/components/commerce/checkout-components'
 import { VoucherInput } from '@/components/commerce/voucher-input'
+import { CartIcon } from '@/components/ui/cart-icon'
 import {
   AppHeader,
   EmptyState,
@@ -13,7 +15,7 @@ import {
 } from '@/components/ui/primitives'
 import { palette, radius, spacing } from '@/constants/design'
 import { useCreateOrder } from '@/hooks/use-commerce'
-import { selectSelectedCartItems, useCartStore } from '@/stores/cart.store'
+import { useCartStore } from '@/stores/cart.store'
 import { useCheckoutStore } from '@/stores/checkout.store'
 import { formatCurrency, selectedVariantLabel } from '@/utils/format'
 import { calculateOrderSummary } from '@/utils/order-calculation'
@@ -48,7 +50,11 @@ function SelectRow({
 }
 
 export default function CheckoutScreen() {
-  const items = useCartStore(selectSelectedCartItems)
+  const cartItems = useCartStore(state => state.items)
+  const items = useMemo(
+    () => cartItems.filter(item => item.selected),
+    [cartItems]
+  )
   const removePurchased = useCartStore(state => state.removePurchased)
   const {
     address,
@@ -70,7 +76,7 @@ export default function CheckoutScreen() {
       <Screen>
         <AppHeader title="Checkout" />
         <EmptyState
-          icon="🛒"
+          icon={<CartIcon size={48} color={palette.primary} variant="cart" />}
           title="Tidak ada produk dipilih"
           message="Pilih produk dari keranjang sebelum checkout."
           action="Ke keranjang"

@@ -1,4 +1,5 @@
 import { router } from 'expo-router'
+import { useMemo } from 'react'
 
 import { ShippingOption } from '@/components/commerce/checkout-components'
 import {
@@ -9,14 +10,18 @@ import {
   Screen,
 } from '@/components/ui/primitives'
 import { useShippingRates } from '@/hooks/use-commerce'
-import { selectSelectedCartItems, useCartStore } from '@/stores/cart.store'
+import { useCartStore } from '@/stores/cart.store'
 import { useCheckoutStore } from '@/stores/checkout.store'
 
 export default function ShippingScreen() {
   const address = useCheckoutStore(state => state.address)
   const selected = useCheckoutStore(state => state.shipping)
   const setShipping = useCheckoutStore(state => state.setShipping)
-  const items = useCartStore(selectSelectedCartItems)
+  const cartItems = useCartStore(state => state.items)
+  const items = useMemo(
+    () => cartItems.filter(item => item.selected),
+    [cartItems]
+  )
   const weight = items.reduce(
     (sum, item) => sum + item.product.weight * item.quantity,
     0

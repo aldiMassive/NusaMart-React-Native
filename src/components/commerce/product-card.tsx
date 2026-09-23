@@ -1,7 +1,7 @@
 import { Image } from 'expo-image'
 import { Pressable, StyleSheet, Text, View } from 'react-native'
 
-import { palette, radius, spacing } from '@/constants/design'
+import { palette, radius } from '@/constants/design'
 import { Product } from '@/types/commerce'
 import { formatCurrency, formatSold } from '@/utils/format'
 
@@ -50,34 +50,33 @@ const styles = StyleSheet.create({
     flex: 1,
     minWidth: 0,
     backgroundColor: palette.surface,
-    borderRadius: radius.lg,
+    borderRadius: radius.md,
     overflow: 'hidden',
-    borderWidth: StyleSheet.hairlineWidth,
-    borderColor: palette.border,
+    borderWidth: 0,
   },
   pressed: { opacity: 0.8 },
-  imageWrap: { aspectRatio: 1, backgroundColor: '#EEF2F1' },
+  imageWrap: { aspectRatio: 1.08, backgroundColor: '#F2F5F4' },
   image: { width: '100%', height: '100%' },
   discount: {
     position: 'absolute',
-    top: spacing.sm,
-    left: spacing.sm,
+    top: 6,
+    left: 6,
     paddingHorizontal: 7,
     paddingVertical: 4,
-    borderRadius: radius.sm,
+    borderRadius: 6,
     overflow: 'hidden',
     backgroundColor: palette.danger,
     color: palette.surface,
     fontSize: 11,
     fontWeight: '800',
   },
-  body: { padding: spacing.md, gap: 4 },
-  name: { color: palette.ink, fontSize: 14, lineHeight: 19, minHeight: 38 },
-  price: { color: palette.primaryDark, fontWeight: '800', fontSize: 15 },
+  body: { padding: 10, gap: 3 },
+  name: { color: palette.ink, fontSize: 13, lineHeight: 18, minHeight: 36 },
+  price: { color: palette.ink, fontWeight: '900', fontSize: 14 },
   original: {
     color: palette.muted,
     fontSize: 11,
     textDecorationLine: 'line-through',
   },
-  meta: { color: palette.muted, fontSize: 11, marginTop: 2 },
+  meta: { color: '#E29A00', fontSize: 10, marginTop: 2, fontWeight: '600' },
 })

@@ -1,7 +1,9 @@
 import { router } from 'expo-router'
+import { useMemo } from 'react'
 import { Alert, Pressable, StyleSheet, Text, View } from 'react-native'
 
 import { CartRow } from '@/components/commerce/cart-row'
+import { CartIcon } from '@/components/ui/cart-icon'
 import {
   AppHeader,
   EmptyState,
@@ -9,13 +11,13 @@ import {
   Screen,
 } from '@/components/ui/primitives'
 import { palette, radius, spacing } from '@/constants/design'
-import { selectSelectedCartItems, useCartStore } from '@/stores/cart.store'
+import { useCartStore } from '@/stores/cart.store'
 import { calculateOrderSummary } from '@/utils/order-calculation'
 import { formatCurrency } from '@/utils/format'
 
 export default function CartScreen() {
   const items = useCartStore(state => state.items)
-  const selected = useCartStore(selectSelectedCartItems)
+  const selected = useMemo(() => items.filter(item => item.selected), [items])
   const setQuantity = useCartStore(state => state.setQuantity)
   const toggleItem = useCartStore(state => state.toggleItem)
   const selectAll = useCartStore(state => state.selectAll)
@@ -28,7 +30,7 @@ export default function CartScreen() {
       <Screen>
         <AppHeader title="Keranjang" />
         <EmptyState
-          icon="🛒"
+          icon={<CartIcon size={48} color={palette.primary} variant="cart" />}
           title="Keranjang masih kosong"
           message="Temukan produk pilihan dan tambahkan ke keranjang."
           action="Mulai belanja"

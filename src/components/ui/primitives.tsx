@@ -20,9 +20,11 @@ export function Screen({
   children,
   scroll = true,
   contentStyle,
+  bottom,
 }: PropsWithChildren<{
   scroll?: boolean
   contentStyle?: StyleProp<ViewStyle>
+  bottom?: ReactNode
 }>) {
   const body = scroll ? (
     <ScrollView
@@ -37,6 +39,7 @@ export function Screen({
   return (
     <SafeAreaView edges={['top', 'left', 'right']} style={styles.screen}>
       {body}
+      {bottom}
     </SafeAreaView>
   )
 }
@@ -168,7 +171,7 @@ export function EmptyState({
   action,
   onAction,
 }: {
-  icon?: string
+  icon?: ReactNode
   title: string
   message: string
   action?: string
@@ -176,7 +179,11 @@ export function EmptyState({
 }) {
   return (
     <View style={styles.state}>
-      <Text style={styles.stateIcon}>{icon}</Text>
+      {typeof icon === 'string' || typeof icon === 'number' ? (
+        <Text style={styles.stateIcon}>{icon}</Text>
+      ) : (
+        <View style={styles.stateGraphic}>{icon}</View>
+      )}
       <Text style={styles.stateTitle}>{title}</Text>
       <Text style={styles.stateText}>{message}</Text>
       {action && onAction ? (
@@ -277,6 +284,14 @@ const styles = StyleSheet.create({
     padding: spacing.xl,
   },
   stateIcon: { fontSize: 42 },
+  stateGraphic: {
+    width: 76,
+    height: 76,
+    borderRadius: 38,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: palette.primarySoft,
+  },
   stateTitle: {
     color: palette.ink,
     fontWeight: '800',
